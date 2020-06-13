@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import data from './data'
+import { AppConsumer, AppProvider } from "./App.context.js"
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App posts={data.posts}/>
+    <AppProvider>
+      <AppConsumer>
+      {({ getPosts, groupedHeadings, posts }) => (
+        <App groupedHeadings={groupedHeadings} getPosts={getPosts} posts={posts}/>
+      )}
+      </AppConsumer>
+    </AppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

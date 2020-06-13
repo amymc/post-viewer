@@ -8,7 +8,7 @@ const listItem = css`
   max-width: 200px;
 `
 
-const ListItem = ({ posts, setEditorId, title }) => {
+const ListItem = ({ posts, setEditorId, title, type }) => {
   const [showPosts, setShowPosts] = useState(false)
   // const [showEditor, setShowEditor] = useState(false)
 
@@ -29,7 +29,7 @@ const ListItem = ({ posts, setEditorId, title }) => {
 
   return (
     <li onClick={togglePosts}>
-     {title}
+     {type === 'week' ? `Week beginnning ${title}` : title}
      {showPosts && (
        <ul>
         {posts.map((post, index) => (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-// import { css } from 'emotion'
+import { css } from 'emotion'
 
 const Editor = ({ post }) => {
   console.log('post', post)

@@ -5,7 +5,9 @@ import ListItem from './ListItem';
 import './App.css';
 
 const App = ({ getPosts, groupedHeadings, posts }) => {
-  const [currentHeadings, setCurrentHeadings] = useState(null)
+  // const [currentHeadings, setCurrentHeadings] = useState(null)
+  const [selectedType, setSelectedType] = useState(null)
+
   const [editorId, setEditorId] = useState(null)
 
   useEffect(() => {
@@ -14,14 +16,14 @@ const App = ({ getPosts, groupedHeadings, posts }) => {
   
   useEffect(() => {
     if(groupedHeadings) {
-      setCurrentHeadings(groupedHeadings.author)
+      setSelectedType('author')
     }
   }, [groupedHeadings])
   
   const getPostsById = (ids) => posts.filter(post => ids.includes(post.id))
 
   const selectType = e => {
-    setCurrentHeadings(groupedHeadings[e.target.value])
+    setSelectedType(e.target.value)
     setEditorId(null)
   }
 
@@ -31,11 +33,11 @@ const App = ({ getPosts, groupedHeadings, posts }) => {
       <select name="type" id="type-select" onChange={selectType}>
         <option value="author">Author</option>
         <option value="location">Location</option>
-        <option value="time">Time</option>
+        <option value="week">Week</option>
       </select>
       <ul>
-      {currentHeadings && Object.entries(currentHeadings).map(([title, ids], index) => (
-        <ListItem key={index} title={title} posts={getPostsById(ids)} setEditorId={setEditorId} />
+      {groupedHeadings && groupedHeadings[selectedType] && Object.entries(groupedHeadings[selectedType]).map(([title, ids], index) => (
+        <ListItem type={selectedType} key={index} title={title} posts={getPostsById(ids)} setEditorId={setEditorId} />
       ))}
       </ul>
       {editorId && (

@@ -30,14 +30,8 @@ const select = css`
 `
 
 const TreeViewer = () => {
-  const [selectedType, setSelectedType] = useState(null)
+  const [selectedType, setSelectedType] = useState(types.week)
   const { setSelectedPostId, groupedHeadings, posts } = useContext(AppContext)
-
-  useEffect(() => {
-    if(groupedHeadings) {
-      setSelectedType(types.weeks)
-    }
-  }, [groupedHeadings])
   
   const getPostsByIds = ids => posts.filter(post => ids.includes(post.id))
 
@@ -50,19 +44,20 @@ const TreeViewer = () => {
     <section className={treeViewer}>
       <div className={selectWrapper}>
         Group by: 
-        <select name="type" id="type-select" className={select} onChange={selectType}>
-          <option value={types.authors}>Authors</option>
-          <option value={types.locations}>Locations</option>
-          <option value={types.weeks}>Weeks</option>
+        <select name="type" id="type-select" data-testid="select" defaultValue={types.week} className={select} onChange={selectType}>
+          <option value={types.author}>Author</option>
+          <option value={types.location}>Location</option>
+          <option value={types.week}>Week</option>
         </select>
       </div>
       <ul className={list}>
-      {groupedHeadings[selectedType] && Object.entries(groupedHeadings[selectedType]).map(([title, ids], index) => (
-        <ListItem type={selectedType} key={index} title={title} posts={getPostsByIds(ids)} />
+      {groupedHeadings[selectedType] && Object.entries(groupedHeadings[selectedType]).map(([title, ids]) => (
+        <ListItem type={selectedType} key={title} title={title} posts={getPostsByIds(ids)} />
       ))}
       </ul>
     </section>
   )
 }
 
-export default TreeViewer;
+export default TreeViewer
+

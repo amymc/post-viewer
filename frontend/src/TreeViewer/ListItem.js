@@ -40,6 +40,12 @@ const ListItem = ({ posts, title, type }) => {
       setShowPosts(false)
     }
   }, [type])
+  
+  useEffect(() => {
+    if(posts.some(post => post.id === selectedPostId)) {
+      setShowPosts(true)
+    }
+  }, [posts, selectedPostId])
 
   const togglePosts = () => setShowPosts(!showPosts)
   const toggleEditor = (e, id) => {
@@ -51,13 +57,14 @@ const ListItem = ({ posts, title, type }) => {
     <li onClick={togglePosts}>
       <h4 className={itemTitle}>
         <span className={icon}>{showPosts ? '-' : '+' }</span>
-        {type === types.weeks ? `Week beginnning ${title}` : title}
+        {type === types.week ? `Week beginnning ${title}` : title}
       </h4>
       {showPosts && (
         <ul>
           {posts.map((post, index) => (
             <li
               className={nestedItem}
+              data-testid={`list-item-${index}`}
               style={{ '--color': `${post.id === selectedPostId ? '#ee5b21' : '#000'}` }}
               onClick={e => toggleEditor(e, post.id)}
               key={index}

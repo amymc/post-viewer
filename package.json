@@ -1,0 +1,10 @@
+{
+  "name": "post-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "cd ./backend && npm run start & cd ./frontend && yarn start",
+    "install": "cd ./backend && npm i & cd ./frontend && npm i",
+    "test": "cd ./frontend && npm run test"
+  }
+}

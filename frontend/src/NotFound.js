@@ -15,4 +15,5 @@ const NotFound = () => (
   </section>
 )
 
-export default NotFound;
+export default NotFound
+

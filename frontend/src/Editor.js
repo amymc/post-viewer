@@ -60,13 +60,13 @@ const confirmation = css`
 
 const editableFields = ['author', 'location']
 
-const capitalise = string => `${string[0].toUpperCase()}${string.slice(1)}`
+const capitalise = string => string === 'id' ? string.toUpperCase() : `${string[0].toUpperCase()}${string.slice(1)}`
 
 const Editor = ({ post }) => {
   const [fieldValues, setFieldValues] = useState({})
   const [showConfirmation, setShowConfirmation] = useState(false)
 
-  const { setPosts } = useContext(AppContext)
+  const { updatePost } = useContext(AppContext)
   
   useEffect(() => {
     if(post) {
@@ -77,34 +77,30 @@ const Editor = ({ post }) => {
   useEffect(() => {
     if (showConfirmation){
       setTimeout(() => {
-        setShowConfirmation(false);
-      }, 1500);
+        setShowConfirmation(false)
+      }, 1500)
     }
-   },[showConfirmation]);
+   },[showConfirmation])
 
   const onChangeInput = (key, value) => setFieldValues({...fieldValues, [key]: value})
-  
+
   const save = e => {
     e.preventDefault()
-    
-    const updatedPost = {...post, ...fieldValues}
-    setPosts(_posts => {
-      const filteredPosts = _posts.filter(_post => _post.id !== updatedPost.id);
-      return ([...filteredPosts, updatedPost])
-    })
-    setShowConfirmation(true);
+    updatePost({...post, ...fieldValues})
+    setShowConfirmation(true)
   }
 
   return (
    <form className={editor} onSubmit={save}>
      {Object.keys(post).map(key => {
-       const InputField = key === 'text' ? 'textarea' : 'input';
+       const InputField = key === 'text' ? 'textarea' : 'input'
        return (
         <div className={textField} key={key}>
-          <label htmlFor={key}>{capitalise(key)}</label>
+          <label id={key}>{capitalise(key)}</label>
           <InputField
             className={input}
             name={key}
+            aria-labelledby={key}
             rows='3'
             value={fieldValues[key] || ''}
             onChange={e => onChangeInput(key, e.target.value)}

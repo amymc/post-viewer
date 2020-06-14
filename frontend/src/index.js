@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import "./index.css";
-import { AppProvider } from "./App.context.js"
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import "./index.css"
+import { AppProvider } from "./App.context"
+import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>

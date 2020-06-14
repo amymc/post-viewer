@@ -1,50 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import Editor from './Editor';
-import ListItem from './ListItem';
+import React, { useContext, useEffect } from 'react'
+import { css } from 'emotion'
+import { AppContext } from "./App.context"
+import Editor from './Editor'
+import TreeViewer from './TreeViewer/TreeViewer'
+import NotFound from './NotFound'
 
-import './App.css';
+const app = css`
+  display: flex;
+  flex-direction: row;
+  font-family: Arial, sans-serif;
+  height: 100%;
+`
 
-const App = ({ getPosts, groupedHeadings, posts }) => {
-  // const [currentHeadings, setCurrentHeadings] = useState(null)
-  const [selectedType, setSelectedType] = useState(null)
-
-  const [editorId, setEditorId] = useState(null)
+const App = () => {
+  const { selectedPostId, getPosts, posts, showError } = useContext(AppContext)
 
   useEffect(() => {
     getPosts()
   }, [getPosts])
-  
-  useEffect(() => {
-    if(groupedHeadings) {
-      setSelectedType('author')
-    }
-  }, [groupedHeadings])
-  
-  const getPostsById = (ids) => posts.filter(post => ids.includes(post.id))
 
-  const selectType = e => {
-    setSelectedType(e.target.value)
-    setEditorId(null)
-  }
+  const getPostsById = id => posts.filter(post => id.includes(post.id))[0]
 
   return (
-    <>
-      Group by: 
-      <select name="type" id="type-select" onChange={selectType}>
-        <option value="author">Author</option>
-        <option value="location">Location</option>
-        <option value="week">Week</option>
-      </select>
-      <ul>
-      {groupedHeadings && groupedHeadings[selectedType] && Object.entries(groupedHeadings[selectedType]).map(([title, ids], index) => (
-        <ListItem type={selectedType} key={index} title={title} posts={getPostsById(ids)} setEditorId={setEditorId} />
-      ))}
-      </ul>
-      {editorId && (
-        <Editor post={getPostsById([editorId])[0]} />
-      )}
-    </>
-  );
+    <section className={app}>
+    {showError ? (
+      <NotFound />
+    ): (
+      <>
+        <TreeViewer />
+        {selectedPostId && (
+          <Editor post={getPostsById([selectedPostId])} />
+        )}
+      </>
+    )}
+    </section>
+  )
 }
 
 export default App;
